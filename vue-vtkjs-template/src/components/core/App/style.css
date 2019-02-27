@@ -1,0 +1,31 @@
+.appContent {
+  /* need a fixed height of arbitrary value
+   * so the vtk viewers don't grow too much in
+   * height when resizing. */
+  height: 0;
+}
+
+/* set vuetify-specific wrapper to contain our overlay */
+:global(.content--wrap) {
+  position: relative;
+}
+
+/* vuetify overrides */
+.toolbarButton {
+  min-width: 48px;
+  margin: 0;
+  height: inherit;
+}
+
+.toolbarButton span {
+  margin-left: 4px;
+}
+
+.noTransition {
+  transition: none;
+}
+
+.logo {
+  height: 35px;
+  padding-right: 10px
+}
