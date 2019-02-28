@@ -1,0 +1,14 @@
+<v-app :dark="darkMode">
+  <v-toolbar
+    clipped-left
+    app
+  >
+    <img :src="logo" :class="$style.logo" v-on:click="$refs.vtkViewComponent.view.resetCamera()"/>
+    <span class="title">Sample Template Vue + vtk.js + pvw Application</span>
+    <v-spacer />
+  </v-toolbar>
+
+  <v-content :class="$style.appContent">
+    <vtk-view ref="vtkViewComponent"/>
+  </v-content>
+</v-app>
