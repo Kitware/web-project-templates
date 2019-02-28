@@ -28,8 +28,7 @@ export const Mutations = objEnum([
 // Actions
 // ----------------------------------------------------------------------------
 
-export const Actions = objEnum([
-]);
+export const Actions = objEnum([]);
 
 // ----------------------------------------------------------------------------
 
