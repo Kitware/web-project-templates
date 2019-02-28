@@ -1,12 +1,6 @@
-import { mapActions } from 'vuex';
-
 import logo from 'vue-vtkjs-template/src/assets/logo.svg';
 import VtkView from 'vue-vtkjs-template/src/components/widgets/VtkView';
-import { Actions } from 'vue-vtkjs-template/src/store/TYPES';
-
-import vtkActor from 'vtk.js/Sources/Rendering/Core/Actor';
-import vtkConeSource from 'vtk.js/Sources/Filters/Sources/ConeSource';
-import vtkMapper from 'vtk.js/Sources/Rendering/Core/Mapper';
+import { Mutations, Actions } from 'vue-vtkjs-template/src/store/TYPES';
 
 // ----------------------------------------------------------------------------
 // Component API
@@ -23,27 +17,34 @@ export default {
     };
   },
   computed: {
-    darkMode() {
-      return this.$store.getters.APP_DARK_THEME;
+    darkMode: {
+      get() {
+        return this.$store.getters.APP_DARK_THEME;
+      },
+      set(value) {
+        this.$store.commit(Mutations.APP_DARK_THEME_SET, value);
+      },
+    },
+    resolution: {
+      get() {
+        return this.$store.getters.CONE_RESOLUTION;
+      },
+      set(value) {
+        this.$store.dispatch(Actions.CONE_UPDATE_RESOLUTION, Number(value));
+      },
+    },
+  },
+  methods: {
+    resetCamera() {
+      this.$store.dispatch(Actions.CONE_RESET_CAMERA);
     },
   },
   mounted() {
-    // Setup vtk pipeline
-    const viewProxy = this.$refs.vtkViewComponent.view;
-
-    const coneSource = vtkConeSource.newInstance({ height: 1.0 });
-
-    const mapper = vtkMapper.newInstance();
-    mapper.setInputConnection(coneSource.getOutputPort());
-
-    const actor = vtkActor.newInstance();
-    actor.setMapper(mapper);
-
-    viewProxy.getRenderer().addActor(actor);
-    viewProxy.resetCamera();
-    viewProxy.renderLater();
+    // Register view to the store
+    this.$store.commit(
+      Mutations.VIEW_PROXY_SET,
+      this.$refs.vtkViewComponent.view
+    );
+    this.$store.dispatch(Actions.CONE_INITIALIZE);
   },
-  methods: mapActions({
-    connect: Actions.NETWORK_CONNECT,
-  }),
 };

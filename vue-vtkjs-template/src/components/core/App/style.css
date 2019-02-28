@@ -1,3 +1,8 @@
+/* set vuetify-specific wrapper to contain our overlay */
+:global(.content--wrap) {
+  position: relative;
+}
+
 .appContent {
   /* need a fixed height of arbitrary value
    * so the vtk viewers don't grow too much in
@@ -5,27 +10,18 @@
   height: 0;
 }
 
-/* set vuetify-specific wrapper to contain our overlay */
-:global(.content--wrap) {
-  position: relative;
-}
-
-/* vuetify overrides */
-.toolbarButton {
-  min-width: 48px;
-  margin: 0;
-  height: inherit;
-}
-
-.toolbarButton span {
-  margin-left: 4px;
-}
-
-.noTransition {
-  transition: none;
-}
-
 .logo {
   height: 35px;
   padding-right: 10px
+}
+
+.slider {
+  max-width: 300px;
+}
+
+.switch {
+  max-width: 100px;
+  width: auto;
+  flex: 0;
+  padding-left: 20px;
 }

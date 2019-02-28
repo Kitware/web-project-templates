@@ -1,5 +1,6 @@
 import logo from 'vue-vtkjs-pvw-template/src/assets/logo.png';
 import VtkView from 'vue-vtkjs-pvw-template/src/components/widgets/VtkView';
+import ProgressBar from 'vue-vtkjs-pvw-template/src/components/widgets/ProgressBar';
 
 import { Mutations, Actions } from 'vue-vtkjs-pvw-template/src/store/TYPES';
 
@@ -11,6 +12,7 @@ export default {
   name: 'App',
   components: {
     VtkView,
+    ProgressBar,
   },
   data() {
     return {
@@ -70,5 +72,10 @@ export default {
     }
     this.$store.commit(Mutations.NETWORK_CONFIG_SET, config);
     this.$store.dispatch(Actions.NETWORK_CONNECT);
+
+    setInterval(
+      () => this.$store.dispatch(Actions.BUSY_UPDATE_PROGRESS, 1),
+      50
+    );
   },
 };

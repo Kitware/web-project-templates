@@ -3,9 +3,26 @@
     clipped-left
     app
   >
-    <img :src="logo" :class="$style.logo" v-on:click="$refs.vtkViewComponent.view.resetCamera()"/>
-    <span class="title">Sample Template Vue + vtk.js Application</span>
+    <img
+      :src="logo"
+      :class="$style.logo"
+      v-on:click="resetCamera()"
+    />
+    <span class="title">Cone Application</span>
     <v-spacer />
+    <v-slider
+      :class="$style.slider"
+      hide-details
+      v-model="resolution"
+      :max="60"
+      :min="3"
+      :step="1"
+    />
+    <v-switch
+      :class="$style.switch"
+      hide-details
+      v-model="darkMode"
+    />
   </v-toolbar>
 
   <v-content :class="$style.appContent">

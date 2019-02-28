@@ -11,6 +11,10 @@ from vtkmodules.vtkPVClientServerCoreRendering import vtkPVRenderView
 from vtkmodules.vtkPVServerManagerRendering import vtkSMPVRepresentationProxy, vtkSMTransferFunctionProxy, vtkSMTransferFunctionManager
 from vtkmodules.vtkWebCore import vtkDataEncoder
 
+
+# Make sure only one cone is available
+cone = simple.Cone()
+
 class ParaViewCone(pv_protocols.ParaViewWebProtocol):
 
     def getCamera(self):
@@ -33,8 +37,7 @@ class ParaViewCone(pv_protocols.ParaViewWebProtocol):
 
     @exportRpc("vtk.initialize")
     def createVisualization(self):
-        self.cone = simple.Cone()
-        self.representation = simple.Show(self.cone)
+        simple.Show(cone)
         return self.resetCamera()
 
 
@@ -56,5 +59,5 @@ class ParaViewCone(pv_protocols.ParaViewWebProtocol):
 
     @exportRpc("vtk.cone.resolution.update")
     def updateResolution(self, resolution):
-        self.cone.Resolution = resolution
+        cone.Resolution = resolution
         self.getApplication().InvokeEvent('UpdateEvent')

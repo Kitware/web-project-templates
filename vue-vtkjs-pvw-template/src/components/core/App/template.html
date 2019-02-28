@@ -3,26 +3,27 @@
     clipped-left
     app
   >
-    <img :src="logo" :class="$style.logo" v-on:click="resetCamera()"/>
-    <span class="title">Sample Template Vue + vtk.js + pvw Application</span>
+    <img
+      :src="logo"
+      :class="$style.logo"
+      v-on:click="resetCamera()"
+    />
+    <span class="title">Cone Application</span>
     <v-spacer />
-      <v-layout justify-space-between align-center>
-        <v-flex xs11>
-          <v-slider
-            hide-details
-            v-model="resolution"
-            :max="60"
-            :min="3"
-            :step="1"
-          />
-        </v-flex>
-        <v-flex xs1>
-          <v-switch
-            hide-details
-            v-model="darkMode"
-          />
-        </v-flex>
-      </v-layout>
+    <progress-bar :progress="busyPercent" />
+    <v-slider
+      :class="$style.slider"
+      hide-details
+      v-model="resolution"
+      :max="60"
+      :min="3"
+      :step="1"
+    />
+    <v-switch
+      :class="$style.switch"
+      hide-details
+      v-model="darkMode"
+    />
   </v-toolbar>
 
   <v-content :class="$style.appContent">

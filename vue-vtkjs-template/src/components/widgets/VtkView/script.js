@@ -6,8 +6,9 @@ export default {
   name: 'VtkView',
   mounted() {
     const container = this.$el.querySelector('.js-renderer');
-    this.view = vtkViewProxy.newInstance({ background: [0, 0, 0, 0] });
+    this.view = vtkViewProxy.newInstance();
     this.view.setContainer(container);
+    this.view.getRenderer().setBackground(0.5, 0.5, 0.5);
     this.view.resize();
     this.view.renderLater();
   },
