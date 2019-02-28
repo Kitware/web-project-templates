@@ -77,6 +77,9 @@ $ npm run lint
 
 ## Dependencies
 
+Edit your `package.json` and remove any `^` in the version side to prevent package update without you knowing.
+Lock files aims to overcome the described issue which make that step optional.
+
 Check the dependencies and update them
 
 ```
@@ -94,9 +97,6 @@ Add `vtk.js`, `typeface-roboto`, `vuetify` and `@mdi/font`
 $ npm install -P vtk.js typeface-roboto vuetify @mdi/font
 $ npm install -D core-js shader-loader worker-loader
 ```
-
-Edit your `package.json` and remove any `^` in the version side to prevent package update without you knowing.
-Lock files aims to overcome the described issue which make that step optional.
 
 ## Add vtk rules and project name as alias
 
