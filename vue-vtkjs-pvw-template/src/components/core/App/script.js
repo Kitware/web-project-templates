@@ -1,12 +1,7 @@
-import { mapActions } from 'vuex';
-
-import logo from 'vue-vtkjs-pvw-template/src/assets/logo.svg';
+import logo from 'vue-vtkjs-pvw-template/src/assets/logo.png';
 import VtkView from 'vue-vtkjs-pvw-template/src/components/widgets/VtkView';
-import { Actions } from 'vue-vtkjs-pvw-template/src/store/TYPES';
 
-import vtkActor from 'vtk.js/Sources/Rendering/Core/Actor';
-import vtkConeSource from 'vtk.js/Sources/Filters/Sources/ConeSource';
-import vtkMapper from 'vtk.js/Sources/Rendering/Core/Mapper';
+import { Mutations, Actions } from 'vue-vtkjs-pvw-template/src/store/TYPES';
 
 // ----------------------------------------------------------------------------
 // Component API
@@ -26,30 +21,54 @@ export default {
     client() {
       return this.$store.getters.NETWORK_CLIENT;
     },
-    darkMode() {
-      return this.$store.getters.APP_DARK_THEME;
+    darkMode: {
+      get() {
+        return this.$store.getters.APP_DARK_THEME;
+      },
+      set(value) {
+        this.$store.commit(Mutations.APP_DARK_THEME_SET, value);
+      },
     },
     busyPercent() {
       return this.$store.getters.BUSY_PROGRESS;
     },
+    resolution: {
+      get() {
+        return this.$store.getters.CONE_RESOLUTION;
+      },
+      set(value) {
+        this.$store.dispatch(Actions.CONE_UPDATE_RESOLUTION, Number(value));
+      },
+    },
+  },
+  watch: {
+    client() {
+      // Setup view for remote rendering
+      this.$store.dispatch(Actions.VIEW_REMOTE_RENDERING_SETUP);
+
+      // This only happen once when the connection is ready
+      this.$store.dispatch(Actions.CONE_INITIALIZE);
+    },
+  },
+  methods: {
+    resetCamera() {
+      this.$store.dispatch(Actions.CONE_RESET_CAMERA);
+    },
   },
   mounted() {
-    // Setup vtk pipeline
-    const viewProxy = this.$refs.vtkViewComponent.view;
+    // Register view to the store
+    this.$store.commit(
+      Mutations.VIEW_PROXY_SET,
+      this.$refs.vtkViewComponent.view
+    );
 
-    const coneSource = vtkConeSource.newInstance({ height: 1.0 });
-
-    const mapper = vtkMapper.newInstance();
-    mapper.setInputConnection(coneSource.getOutputPort());
-
-    const actor = vtkActor.newInstance();
-    actor.setMapper(mapper);
-
-    viewProxy.getRenderer().addActor(actor);
-    viewProxy.resetCamera();
-    viewProxy.renderLater();
+    // Initiate network connection
+    const config = { application: 'cone' };
+    if (location.host === 'localhost:8080') {
+      // We suppose that we have dev server and that ParaView/VTK is running on port 1234
+      config.sessionURL = 'ws://localhost:1234/ws';
+    }
+    this.$store.commit(Mutations.NETWORK_CONFIG_SET, config);
+    this.$store.dispatch(Actions.NETWORK_CONNECT);
   },
-  methods: mapActions({
-    connect: Actions.NETWORK_CONNECT,
-  }),
 };

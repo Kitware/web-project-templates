@@ -1,5 +1,12 @@
-import Client from 'vue-vtkjs-pvw-template/src/io/Client';
-import { Mutations, Actions } from 'vue-vtkjs-pvw-template/src/store/TYPES';
+import vtkWSLinkClient from 'vtk.js/Sources/IO/Core/WSLinkClient';
+import SmartConnect from 'wslink/src/SmartConnect';
+
+import coneProtocol from 'vue-vtkjs-pvw-template/src/io/protocol';
+
+import { Mutations } from 'vue-vtkjs-pvw-template/src/store/TYPES';
+
+// Bind vtkWSLinkClient to our SmartConnect
+vtkWSLinkClient.setSmartConnectClass(SmartConnect);
 
 export default {
   state: {
@@ -23,33 +30,49 @@ export default {
     },
   },
   actions: {
-    NETWORK_CONNECT({ commit, dispatch, state }) {
+    NETWORK_CONNECT({ commit, state }) {
       const { config, client } = state;
       if (client && client.isConnected()) {
         client.disconnect();
       }
-      const clientToConnect = client || new Client();
+      let clientToConnect = client;
+      if (!clientToConnect) {
+        clientToConnect = vtkWSLinkClient.newInstance();
+        clientToConnect.setProtocols({
+          Cone: coneProtocol,
+        });
+      }
 
-      clientToConnect.setBusyCallback((count) => {
+      // Connect to busy store
+      clientToConnect.onBusyChange((count) => {
         commit(Mutations.BUSY_COUNT_SET, count);
       });
+      clientToConnect.beginBusy();
 
-      clientToConnect.updateBusy(+1);
-
-      clientToConnect.setConnectionErrorCallback((type, httpReq) => {
+      // Error
+      clientToConnect.onConnectionError((httpReq) => {
         const message =
           (httpReq && httpReq.response && httpReq.response.error) ||
-          `Connection ${type}`;
+          `Connection error`;
         console.error(message);
         console.log(httpReq);
       });
 
+      // Close
+      clientToConnect.onConnectionClose((httpReq) => {
+        const message =
+          (httpReq && httpReq.response && httpReq.response.error) ||
+          `Connection close`;
+        console.error(message);
+        console.log(httpReq);
+      });
+
+      // Connect
       clientToConnect
         .connect(config)
         .then((validClient) => {
           commit(Mutations.NETWORK_CLIENT_SET, validClient);
-          dispatch(Actions.COLOR_FETCH_PRESET_NAMES, 500);
-          clientToConnect.updateBusy(-1);
+          clientToConnect.endBusy();
         })
         .catch((error) => {
           console.error(error);

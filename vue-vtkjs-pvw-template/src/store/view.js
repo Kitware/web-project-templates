@@ -118,49 +118,41 @@ export default {
     },
   },
   actions: {
-    VIEW_UPDATE_CAMERA({ dispatch, rootState, state }, id) {
-      const client = rootState.network.client;
-      const viewId = id || state.view;
-      if (client && state.viewProxy) {
-        client.remote.Lite.getCamera(viewId)
-          .then(
-            ({ focalPoint, viewUp, position, centerOfRotation, bounds }) => {
-              // Update bounds in local vtk.js renderer
-              source
-                .getPoints()
-                .setData(
-                  Float64Array.from([
-                    bounds[0],
-                    bounds[2],
-                    bounds[4],
-                    bounds[1],
-                    bounds[3],
-                    bounds[5],
-                  ]),
-                  3
-                );
+    VIEW_UPDATE_CAMERA(
+      { state },
+      { focalPoint, viewUp, position, centerOfRotation, bounds }
+    ) {
+      source
+        .getPoints()
+        .setData(
+          Float64Array.from([
+            bounds[0],
+            bounds[2],
+            bounds[4],
+            bounds[1],
+            bounds[3],
+            bounds[5],
+          ]),
+          3
+        );
 
-              updateCamera(state.viewProxy, {
-                centerOfRotation,
-                focalPoint,
-                position,
-                viewUp,
-              });
-            }
-          )
-          .catch(console.error);
-      }
+      updateCamera(state.viewProxy, {
+        centerOfRotation,
+        focalPoint,
+        position,
+        viewUp,
+      });
     },
-    VIEW_RESET_CAMERA({ dispatch, rootState, state }, id) {
-      const client = rootState.network.client;
-      const viewId = id || state.view;
-      if (client) {
-        client.remote.ViewPort.resetCamera(viewId).catch(console.error);
-        dispatch(Actions.VIEW_UPDATE_CAMERA, id);
-      } else {
-        console.error('no client', rootState);
-      }
-    },
+    // VIEW_RESET_CAMERA({ dispatch, rootState, state }, id) {
+    //   const client = rootState.network.client;
+    //   const viewId = id || state.view;
+    //   if (client) {
+    //     client.remote.ViewPort.resetCamera(viewId).catch(console.error);
+    //     dispatch(Actions.VIEW_UPDATE_CAMERA, id);
+    //   } else {
+    //     console.error('no client', rootState);
+    //   }
+    // },
     VIEW_ROLL_LEFT({ state, commit }, id) {
       if (state.viewProxy) {
         state.viewProxy.setAnimation(true, this);
@@ -197,29 +189,49 @@ export default {
         intervalId = setInterval(rotate, 10);
       }
     },
-    VIEW_UPDATE_ORIENTATION(
-      { state, commit, dispatch },
-      { axis, orientation, viewUp }
-    ) {
-      if (state.viewProxy && !state.inAnimation) {
-        state.inAnimation = true;
-        state.viewProxy
-          .updateOrientation(axis, orientation, viewUp || VIEW_UPS[axis], 100)
-          .then(() => {
-            state.inAnimation = false;
-            dispatch(Actions.VIEW_RESET_CAMERA);
-          });
-      }
-    },
-    VIEW_RENDER({ rootState, state }, id) {
+    // VIEW_UPDATE_ORIENTATION(
+    //   { state, commit, dispatch },
+    //   { axis, orientation, viewUp }
+    // ) {
+    //   if (state.viewProxy && !state.inAnimation) {
+    //     state.inAnimation = true;
+    //     state.viewProxy
+    //       .updateOrientation(axis, orientation, viewUp || VIEW_UPS[axis], 100)
+    //       .then(() => {
+    //         state.inAnimation = false;
+    //         dispatch(Actions.VIEW_RESET_CAMERA);
+    //       });
+    //   }
+    // },
+    // VIEW_RENDER({ rootState, state }, id) {
+    //   const client = rootState.network.client;
+    //   const viewId = id || state.view;
+    //   if (client) {
+    //     client.remote.VtkImageDelivery.stillRender({ view: viewId }).catch(
+    //       console.error
+    //     );
+    //   } else {
+    //     console.error('no client', rootState);
+    //   }
+    // },
+    VIEW_REMOTE_RENDERING_SETUP({ state, rootState }) {
       const client = rootState.network.client;
-      const viewId = id || state.view;
-      if (client) {
-        client.remote.VtkImageDelivery.stillRender({ view: viewId }).catch(
-          console.error
-        );
-      } else {
-        console.error('no client', rootState);
+      const view = state.viewProxy;
+
+      if (client && view) {
+        // Create and link viewStream
+        const viewStream = client.getImageStream().createViewStream('-1');
+        view.getOpenglRenderWindow().setViewStream(viewStream);
+        view.setBackground([0, 0, 0, 0]);
+        const camera = view.getCamera();
+        viewStream.setCamera(camera);
+
+        // Bind user input
+        const interactor = view.getRenderWindow().getInteractor();
+        interactor.onStartAnimation(viewStream.startInteraction);
+        interactor.onEndAnimation(viewStream.endInteraction);
+
+        view.onResize(viewStream.render());
       }
     },
   },

@@ -76,11 +76,13 @@ Install `@vue/eslint-config-prettier` and update linter config to use that prese
 $ npm install -D @vue/eslint-config-prettier
 ```
 
-Edit `.eslintrc.js` to add `@vue/prettier` to the list of extensions
+Edit `.eslintrc.js` to add `@vue/prettier` to the list of extensions and update rules
 
 ```
 [...]
   extends: ['plugin:vue/essential', '@vue/airbnb', '@vue/prettier'],
+  rules: {
+    'import/extensions': 0,
 [...]
 ```
 
@@ -98,11 +100,11 @@ Install `typeface-roboto`, `vuetify` and `@mdi/font`
 $ npm install -P typeface-roboto vuetify @mdi/font
 ```
 
-Install `vtk.js`, `wslink` with the needed loaders `core-js`, `shader-loader`, `worker-loader`
+Install `vtk.js`, `wslink`, `core-js` with the needed loaders `shader-loader`, `worker-loader`
 
 ```
-$ npm install -P vtk.js wslink
-$ npm install -D core-js shader-loader worker-loader
+$ npm install -P vtk.js wslink core-js
+$ npm install -D shader-loader worker-loader
 ```
 
 ## Fix depenencies versions
@@ -178,4 +180,22 @@ vue-vtkjs-pvw-template/
   - package.json      <--- (vue-cli + vtk + pvw) Project description with dependencies
   - postcss.config.js <--- (vue-cli) Post-css configuration
   - vue.config.js     <--- (app) Add custom rules to support vtk.js/Sources/* imports
+```
+
+## Run the application
+
+```
+$ npm run build
+$ /.../pvpython ./server/pvpython/pvw-server.py --content ./dist --port 1234
+
+Open your browser to http://localhost:1234/
+```
+
+Or you can live development
+
+```
+$ npm run serve &
+$ /.../pvpython ./server/pvpython/pvw-server.py --port 1234
+
+Open your browser to http://localhost:8080/
 ```

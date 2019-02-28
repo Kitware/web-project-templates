@@ -15,6 +15,9 @@ export const Getters = objEnum([
   'BUSY_PROGRESS',
   'BUSY_COUNT',
 
+  // cone
+  'CONE_RESOLUTION',
+
   // index
   'APP_DARK_THEME',
 
@@ -43,6 +46,9 @@ export const Mutations = objEnum([
   'BUSY_PROGRESS_SET',
   'BUSY_COUNT_SET',
 
+  // cone
+  'CONE_RESOLUTION_SET',
+
   // index
   'APP_DARK_THEME_SET',
 
@@ -70,16 +76,19 @@ export const Actions = objEnum([
   // busy
   'BUSY_UPDATE_PROGRESS',
 
+  // cone
+  'CONE_INITIALIZE',
+  'CONE_UPDATE_RESOLUTION',
+  'CONE_RESET_CAMERA',
+
   // network
   'NETWORK_CONNECT',
 
   // view
   'VIEW_UPDATE_CAMERA',
-  'VIEW_RESET_CAMERA',
+  'VIEW_REMOTE_RENDERING_SETUP',
   'VIEW_ROLL_LEFT',
   'VIEW_ROLL_RIGHT',
-  'VIEW_UPDATE_ORIENTATION',
-  'VIEW_RENDER',
 ]);
 
 // ----------------------------------------------------------------------------

@@ -2,6 +2,7 @@
 import Vuex from 'vuex';
 
 import busy from 'vue-vtkjs-pvw-template/src/store/busy';
+import cone from 'vue-vtkjs-pvw-template/src/store/cone';
 import network from 'vue-vtkjs-pvw-template/src/store/network';
 import view from 'vue-vtkjs-pvw-template/src/store/view';
 
@@ -14,6 +15,7 @@ function createStore() {
     },
     modules: {
       busy,
+      cone,
       network,
       view,
     },
