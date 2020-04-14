@@ -88,7 +88,7 @@ class _Server(pv_wslink.PVServerProtocol):
         self.updateSecret(_Server.authKey)
 
         # tell the C++ web app to use no encoding. ParaViewWebPublishImageDelivery must be set to decode=False to match.
-        self.getApplication().SetImageEncoding(0);
+        self.getApplication().SetImageEncoding(0)
 
         # Disable interactor-based render calls
         view = simple.GetRenderView()

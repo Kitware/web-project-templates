@@ -1,5 +1,6 @@
 import logo from 'vue-vtkjs-pvw-template/src/assets/logo.png';
 import VtkView from 'vue-vtkjs-pvw-template/src/components/widgets/VtkView';
+import RemoteRenderingView from 'vue-vtkjs-pvw-template/src/components/widgets/RemoteRenderingView';
 import ProgressBar from 'vue-vtkjs-pvw-template/src/components/widgets/ProgressBar';
 
 import { Mutations, Actions } from 'vue-vtkjs-pvw-template/src/store/TYPES';
@@ -12,6 +13,7 @@ export default {
   name: 'App',
   components: {
     VtkView,
+    RemoteRenderingView,
     ProgressBar,
   },
   data() {
