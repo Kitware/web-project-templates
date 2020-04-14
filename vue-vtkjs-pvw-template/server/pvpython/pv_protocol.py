@@ -5,12 +5,23 @@ from wslink import register as exportRpc
 from paraview import simple, servermanager
 from paraview.web import protocols as pv_protocols
 
-from vtkmodules.vtkCommonCore import vtkUnsignedCharArray, vtkCollection
-from vtkmodules.vtkCommonDataModel import vtkImageData
-from vtkmodules.vtkPVClientServerCoreRendering import vtkPVRenderView
-from vtkmodules.vtkPVServerManagerRendering import vtkSMPVRepresentationProxy, vtkSMTransferFunctionProxy, vtkSMTransferFunctionManager
-from vtkmodules.vtkWebCore import vtkDataEncoder
+try:
+    # PV 5.8+
+    from paraview.modules.vtkRemotingViews import vtkPVRenderView
+except:
+    pass
 
+try:
+    # PV 5.7
+    from paraview.modules.vtkPVClientServerCoreRendering import vtkPVRenderView
+except:
+    pass
+
+try:
+    # PV 5.6
+    from vtkmodules.vtkPVClientServerCoreRendering import vtkPVRenderView
+except:
+    pass
 
 # Make sure only one cone is available
 cone = simple.Cone()
