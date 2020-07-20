@@ -1,13 +1,6 @@
 <v-app :dark="darkMode">
-  <v-toolbar
-    clipped-left
-    app
-  >
-    <img
-      :src="logo"
-      :class="$style.logo"
-      v-on:click="resetCamera()"
-    />
+  <v-toolbar clipped-left app>
+    <img :src="logo" :class="$style.logo" v-on:click="resetCamera()" />
     <span class="title">Cone Application</span>
     <v-spacer />
     <progress-bar :progress="busyPercent" />
@@ -19,15 +12,11 @@
       :min="3"
       :step="1"
     />
-    <v-switch
-      :class="$style.switch"
-      hide-details
-      v-model="darkMode"
-    />
+    <v-switch :class="$style.switch" hide-details v-model="darkMode" />
   </v-toolbar>
 
   <v-content :class="$style.appContent">
-    <!-- <remote-rendering-view :client="client" /> -->
-    <vtk-view ref="vtkViewComponent"/>
+    <remote-rendering-view :client="client" />
+    <!-- <vtk-view ref="vtkViewComponent"/> -->
   </v-content>
 </v-app>

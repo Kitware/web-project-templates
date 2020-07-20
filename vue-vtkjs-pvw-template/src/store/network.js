@@ -5,6 +5,8 @@ import coneProtocol from 'vue-vtkjs-pvw-template/src/io/protocol';
 
 import { Mutations } from 'vue-vtkjs-pvw-template/src/store/TYPES';
 
+import { connectImageStream } from 'vtk.js/Sources/Rendering/Misc/RemoteView';
+
 // Bind vtkWSLinkClient to our SmartConnect
 vtkWSLinkClient.setSmartConnectClass(SmartConnect);
 
@@ -71,6 +73,7 @@ export default {
       clientToConnect
         .connect(config)
         .then((validClient) => {
+          connectImageStream(validClient.getConnection().getSession());
           commit(Mutations.NETWORK_CLIENT_SET, validClient);
           clientToConnect.endBusy();
         })

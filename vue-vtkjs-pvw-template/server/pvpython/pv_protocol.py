@@ -84,24 +84,13 @@ class ParaViewCone(pv_protocols.ParaViewWebProtocol):
         rootId = viewProxy.GetGlobalIDAsString()
         zoomFactor = 1.0 - event['spinY'] / 10.0
 
-        if rootId in self.linkedViews:
-          fp = viewProxy.CameraFocalPoint
-          pos = viewProxy.CameraPosition
-          delta = [fp[i] - pos[i] for i in range(3)]
-          viewProxy.GetActiveCamera().Zoom(zoomFactor)
-          viewProxy.UpdatePropertyInformation()
-          pos2 = viewProxy.CameraPosition
-          viewProxy.CameraFocalPoint = [pos2[i] + delta[i] for i in range(3)]
-          dstViews = [self.getView(vid) for vid in self.linkedViews]
-          pushCamera(viewProxy, dstViews)
-        else:
-          fp = viewProxy.CameraFocalPoint
-          pos = viewProxy.CameraPosition
-          delta = [fp[i] - pos[i] for i in range(3)]
-          viewProxy.GetActiveCamera().Zoom(zoomFactor)
-          viewProxy.UpdatePropertyInformation()
-          pos2 = viewProxy.CameraPosition
-          viewProxy.CameraFocalPoint = [pos2[i] + delta[i] for i in range(3)]
+        fp = viewProxy.CameraFocalPoint
+        pos = viewProxy.CameraPosition
+        delta = [fp[i] - pos[i] for i in range(3)]
+        viewProxy.GetActiveCamera().Zoom(zoomFactor)
+        viewProxy.UpdatePropertyInformation()
+        pos2 = viewProxy.CameraPosition
+        viewProxy.CameraFocalPoint = [pos2[i] + delta[i] for i in range(3)]
 
       if 'End' in event["type"]:
         self.getApplication().InvokeEvent('EndInteractionEvent')

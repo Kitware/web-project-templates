@@ -61,10 +61,12 @@ export default {
   },
   mounted() {
     // Register view to the store
-    this.$store.commit(
-      Mutations.VIEW_PROXY_SET,
-      this.$refs.vtkViewComponent.view
-    );
+    if (this.$refs.vtkViewComponent) {
+      this.$store.commit(
+        Mutations.VIEW_PROXY_SET,
+        this.$refs.vtkViewComponent.view
+      );
+    }
 
     // Initiate network connection
     const config = { application: 'cone' };
