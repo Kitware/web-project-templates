@@ -1,8 +1,8 @@
 # vue-vtkjs-pvw-template
 
-This project aims to provide a base template in the creation of a Web project involving vtk.js without rendering server.
+This project aims to provide a base template in the creation of a Web project involving vtk.js with a rendering server such as VTK or ParaView.
 The steps below explained how we reach the point the template is currently in and does not require the user to run them again.
-The goal is to highlight how we started from a main stream project and edit it to accomodate our expectation in web developement with vtk.js.
+The goal is to highlight how we started from a main stream project and edit it to accomodate our expectation in web developement with vtk.js/VTK/ParaView.
 
 ## Start from vue-cli project generation
 
