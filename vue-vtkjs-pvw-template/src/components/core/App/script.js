@@ -22,14 +22,6 @@ export default {
   },
   computed: {
     ...mapGetters({ client: 'WS_CLIENT', busyPercent: 'BUSY_PROGRESS' }),
-    darkMode: {
-      get() {
-        return this.$store.getters.APP_DARK_THEME;
-      },
-      set(value) {
-        this.$store.commit('APP_DARK_THEME_SET', value);
-      },
-    },
     resolution: {
       get() {
         return this.$store.getters.CONE_RESOLUTION;
@@ -57,6 +49,9 @@ export default {
       connect: 'WS_CONNECT',
       updateBusy: 'BUSY_UPDATE_PROGRESS',
     }),
+    darkToggle() {
+      //this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    },
   },
   mounted() {
     // Register view to the store

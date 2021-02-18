@@ -10,24 +10,11 @@ import view from 'vue-vtkjs-pvw-template/src/store/view';
 
 function createStore() {
   return new Vuex.Store({
-    state: {
-      dark: false,
-    },
     modules: {
       busy,
       cone,
       wslink,
       view,
-    },
-    getters: {
-      APP_DARK_THEME(state) {
-        return state.dark;
-      },
-    },
-    mutations: {
-      APP_DARK_THEME_SET(state, isDark) {
-        state.dark = isDark;
-      },
     },
   });
 }
