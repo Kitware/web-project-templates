@@ -6,7 +6,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import App from 'vue-vtkjs-pvw-template/src/components/core/App';
-import Vuetify from 'vue-vtkjs-pvw-template/src/plugins/vuetify';
+import Vuetify from 'vue-vtkjs-pvw-template/src/plugins/vuetify.js';
 import store from 'vue-vtkjs-pvw-template/src/store';
 
 /* eslint-disable-next-line import/extensions */
