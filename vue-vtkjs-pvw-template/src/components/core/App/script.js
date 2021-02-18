@@ -70,9 +70,9 @@ export default {
 
     // Initiate network connection
     const config = { application: 'cone' };
-    if (location.host === 'localhost:8080') {
+    if (location.port === '8080') {
       // We suppose that we have dev server and that ParaView/VTK is running on port 1234
-      config.sessionURL = 'ws://localhost:1234/ws';
+      config.sessionURL = `ws://${location.hostname}:1234/ws`;
     }
     this.$store.commit(Mutations.NETWORK_CONFIG_SET, config);
     this.$store.dispatch(Actions.NETWORK_CONNECT);
