@@ -1,9 +1,8 @@
+import { mapGetters, mapActions } from 'vuex';
 import logo from 'vue-vtkjs-pvw-template/src/assets/logo.png';
 import VtkView from 'vue-vtkjs-pvw-template/src/components/widgets/VtkView';
 import RemoteRenderingView from 'vue-vtkjs-pvw-template/src/components/widgets/RemoteRenderingView';
 import ProgressBar from 'vue-vtkjs-pvw-template/src/components/widgets/ProgressBar';
-
-import { Mutations, Actions } from 'vue-vtkjs-pvw-template/src/store/TYPES';
 
 // ----------------------------------------------------------------------------
 // Component API
@@ -22,50 +21,47 @@ export default {
     };
   },
   computed: {
-    client() {
-      return this.$store.getters.NETWORK_CLIENT;
-    },
+    ...mapGetters({ client: 'WS_CLIENT', busyPercent: 'BUSY_PROGRESS' }),
     darkMode: {
       get() {
         return this.$store.getters.APP_DARK_THEME;
       },
       set(value) {
-        this.$store.commit(Mutations.APP_DARK_THEME_SET, value);
+        this.$store.commit('APP_DARK_THEME_SET', value);
       },
-    },
-    busyPercent() {
-      return this.$store.getters.BUSY_PROGRESS;
     },
     resolution: {
       get() {
         return this.$store.getters.CONE_RESOLUTION;
       },
       set(value) {
-        this.$store.dispatch(Actions.CONE_UPDATE_RESOLUTION, Number(value));
+        this.updateConeResolution(Number(value));
       },
     },
   },
   watch: {
     client() {
       // Setup view for remote rendering
-      this.$store.dispatch(Actions.VIEW_REMOTE_RENDERING_SETUP);
+      this.viewRemoteRenderSetup();
 
       // This only happen once when the connection is ready
-      this.$store.dispatch(Actions.CONE_INITIALIZE);
+      this.initializeCone();
     },
   },
   methods: {
-    resetCamera() {
-      this.$store.dispatch(Actions.CONE_RESET_CAMERA);
-    },
+    ...mapActions({
+      updateConeResolution: 'CONE_UPDATE_RESOLUTION',
+      viewRemoteRenderSetup: 'VIEW_REMOTE_RENDERING_SETUP',
+      initializeCone: 'CONE_INITIALIZE',
+      resetCamera: 'CONE_RESET_CAMERA',
+      connect: 'WS_CONNECT',
+      updateBusy: 'BUSY_UPDATE_PROGRESS',
+    }),
   },
   mounted() {
     // Register view to the store
     if (this.$refs.vtkViewComponent) {
-      this.$store.commit(
-        Mutations.VIEW_PROXY_SET,
-        this.$refs.vtkViewComponent.view
-      );
+      this.$store.commit('VIEW_PROXY_SET', this.$refs.vtkViewComponent.view);
     }
 
     // Initiate network connection
@@ -74,12 +70,9 @@ export default {
       // We suppose that we have dev server and that ParaView/VTK is running on port 1234
       config.sessionURL = `ws://${location.hostname}:1234/ws`;
     }
-    this.$store.commit(Mutations.NETWORK_CONFIG_SET, config);
-    this.$store.dispatch(Actions.NETWORK_CONNECT);
+    this.$store.commit('WS_CONFIG_SET', config);
+    this.connect();
 
-    setInterval(
-      () => this.$store.dispatch(Actions.BUSY_UPDATE_PROGRESS, 1),
-      50
-    );
+    setInterval(() => this.updateBusy(1), 50);
   },
 };

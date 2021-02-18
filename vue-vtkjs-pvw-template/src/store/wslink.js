@@ -3,8 +3,6 @@ import SmartConnect from 'wslink/src/SmartConnect';
 
 import coneProtocol from 'vue-vtkjs-pvw-template/src/io/protocol';
 
-import { Mutations } from 'vue-vtkjs-pvw-template/src/store/TYPES';
-
 import { connectImageStream } from 'vtk.js/Sources/Rendering/Misc/RemoteView';
 
 // Bind vtkWSLinkClient to our SmartConnect
@@ -16,23 +14,23 @@ export default {
     config: null,
   },
   getters: {
-    NETWORK_CLIENT(state) {
+    WS_CLIENT(state) {
       return state.client;
     },
-    NETWORK_CONFIG(state) {
+    WS_CONFIG(state) {
       return state.config;
     },
   },
   mutations: {
-    NETWORK_CLIENT_SET(state, client) {
+    WS_CLIENT_SET(state, client) {
       state.client = client;
     },
-    NETWORK_CONFIG_SET(state, config) {
+    WS_CONFIG_SET(state, config) {
       state.config = config;
     },
   },
   actions: {
-    NETWORK_CONNECT({ commit, state }) {
+    WS_CONNECT({ commit, state }) {
       const { config, client } = state;
       if (client && client.isConnected()) {
         client.disconnect();
@@ -47,7 +45,7 @@ export default {
 
       // Connect to busy store
       clientToConnect.onBusyChange((count) => {
-        commit(Mutations.BUSY_COUNT_SET, count);
+        commit('BUSY_COUNT_SET', count);
       });
       clientToConnect.beginBusy();
 
@@ -74,7 +72,7 @@ export default {
         .connect(config)
         .then((validClient) => {
           connectImageStream(validClient.getConnection().getSession());
-          commit(Mutations.NETWORK_CLIENT_SET, validClient);
+          commit('WS_CLIENT_SET', validClient);
           clientToConnect.endBusy();
         })
         .catch((error) => {

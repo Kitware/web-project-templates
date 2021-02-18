@@ -1,6 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { Mutations } from 'vue-vtkjs-pvw-template/src/store/TYPES';
-
 export default {
   state: {
     count: 0,
@@ -25,9 +23,9 @@ export default {
   actions: {
     BUSY_UPDATE_PROGRESS({ state, commit }, delta = 0.5) {
       if (state.count) {
-        commit(Mutations.BUSY_PROGRESS_SET, state.progress + delta);
+        commit('BUSY_PROGRESS_SET', state.progress + delta);
       } else {
-        commit(Mutations.BUSY_PROGRESS_SET, 0);
+        commit('BUSY_PROGRESS_SET', 0);
       }
     },
   },

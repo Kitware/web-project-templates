@@ -1,16 +1,10 @@
 /* eslint-disable no-unused-vars */
-import { Actions, Mutations } from 'vue-vtkjs-pvw-template/src/store/TYPES';
-
 import vtkActor from 'vtk.js/Sources/Rendering/Core/Actor';
 import vtkMapper from 'vtk.js/Sources/Rendering/Core/Mapper';
 import vtkPolyData from 'vtk.js/Sources/Common/DataModel/PolyData';
 
 const ROTATION_STEP = 2;
-const VIEW_UPS = [
-  [0, 1, 0],
-  [0, 0, 1],
-  [0, 1, 0],
-];
+const VIEW_UPS = [[0, 1, 0], [0, 0, 1], [0, 1, 0]];
 
 const actor = vtkActor.newInstance();
 const mapper = vtkMapper.newInstance();
@@ -155,7 +149,7 @@ export default {
     //   const viewId = id || state.view;
     //   if (client) {
     //     client.remote.ViewPort.resetCamera(viewId).catch(console.error);
-    //     dispatch(Actions.VIEW_UPDATE_CAMERA, id);
+    //     dispatch('VIEW_UPDATE_CAMERA', id);
     //   } else {
     //     console.error('no client', rootState);
     //   }
@@ -206,7 +200,7 @@ export default {
     //       .updateOrientation(axis, orientation, viewUp || VIEW_UPS[axis], 100)
     //       .then(() => {
     //         state.inAnimation = false;
-    //         dispatch(Actions.VIEW_RESET_CAMERA);
+    //         dispatch('VIEW_RESET_CAMERA');
     //       });
     //   }
     // },
@@ -222,7 +216,7 @@ export default {
     //   }
     // },
     VIEW_REMOTE_RENDERING_SETUP({ state, rootState }) {
-      const client = rootState.network.client;
+      const client = rootState.wslink.client;
       const view = state.viewProxy;
 
       if (client && view) {
