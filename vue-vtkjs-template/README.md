@@ -2,7 +2,7 @@
 
 This project aims to provide a base template in the creation of a Web project involving vtk.js without rendering server.
 The steps below explained how we reach the point the template is currently in and does not require the user to run them again.
-The goal is to highlight how we started from a main stream project and edit it to accomodate our expectation in web developement with vtk.js.
+The goal is to highlight how we started from a main stream project and edit it to accommodate our expectation in web development with vtk.js.
 
 ## Start from vue-cli project generation
 
