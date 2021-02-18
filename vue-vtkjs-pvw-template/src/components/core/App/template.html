@@ -12,7 +12,10 @@
       :min="3"
       :step="1"
     />
-    <v-switch :class="$style.switch" hide-details v-model="darkToggle" />
+    <v-switch
+      :class="$style.switch"
+      @click="$vuetify.theme.dark = !$vuetify.theme.dark"
+    />
   </v-app-bar>
 
   <v-main :class="$style.appContent">

@@ -49,9 +49,6 @@ export default {
       connect: 'WS_CONNECT',
       updateBusy: 'BUSY_UPDATE_PROGRESS',
     }),
-    darkToggle() {
-      //this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
-    },
   },
   mounted() {
     // Register view to the store
