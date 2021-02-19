@@ -93,5 +93,31 @@ export default {
           console.error(error);
         });
     },
+    CONE_INITIALIZE({ state }) {
+      if (state.client) {
+        state.client
+          .getRemote()
+          .Cone.createVisualization()
+          .catch(console.error);
+      }
+    },
+    CONE_UPDATE_RESOLUTION({ state, commit }, res) {
+      const resolution = Number(res);
+      commit('CONE_RESOLUTION_SET', resolution);
+      if (state.client) {
+        state.client
+          .getRemote()
+          .Cone.updateResolution(resolution)
+          .catch(console.error);
+      }
+    },
+    CONE_RESET_CAMERA({ state }) {
+      if (state.client) {
+        state.client
+          .getRemote()
+          .Cone.resetCamera()
+          .catch(console.error);
+      }
+    },
   },
 };
