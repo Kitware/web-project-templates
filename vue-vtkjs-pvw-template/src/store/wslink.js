@@ -31,7 +31,14 @@ export default {
   },
   actions: {
     WS_CONNECT({ commit, state }) {
-      const { config, client } = state;
+      // Initiate network connection
+      const config = { application: 'cone' };
+      if (location.port === '8080') {
+        // We suppose that we have dev server and that ParaView/VTK is running on port 1234
+        config.sessionURL = `ws://${location.hostname}:1234/ws`;
+      }
+
+      const { client } = state;
       if (client && client.isConnected()) {
         client.disconnect();
       }
