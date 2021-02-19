@@ -7,10 +7,11 @@
     <v-slider
       :class="$style.slider"
       hide-details
-      v-model="resolution"
+      :value="resolution"
       :max="60"
       :min="3"
       :step="1"
+      @input="setResolution"
     />
     <v-switch
       :class="$style.switch"

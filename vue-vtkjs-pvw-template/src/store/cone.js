@@ -22,11 +22,15 @@ export default {
           .catch(console.error);
       }
     },
-    CONE_UPDATE_RESOLUTION({ rootState, commit }, resolution) {
+    CONE_UPDATE_RESOLUTION({ rootState, commit }, res) {
+      const resolution = Number(res);
       commit('CONE_RESOLUTION_SET', resolution);
       const client = rootState.wslink.client;
       if (client) {
-        client.getRemote().Cone.updateResolution(resolution);
+        client
+          .getRemote()
+          .Cone.updateResolution(resolution)
+          .catch(console.error);
       }
     },
     CONE_RESET_CAMERA({ rootState }) {

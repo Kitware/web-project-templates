@@ -17,19 +17,15 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({ client: 'WS_CLIENT', busy: 'WS_BUSY' }),
-    resolution: {
-      get() {
-        return this.$store.getters.CONE_RESOLUTION;
-      },
-      set(value) {
-        this.updateConeResolution(Number(value));
-      },
-    },
+    ...mapGetters({
+      client: 'WS_CLIENT',
+      busy: 'WS_BUSY',
+      resolution: 'CONE_RESOLUTION',
+    }),
   },
   methods: {
     ...mapActions({
-      updateConeResolution: 'CONE_UPDATE_RESOLUTION',
+      setResolution: 'CONE_UPDATE_RESOLUTION',
       initializeCone: 'CONE_INITIALIZE',
       resetCamera: 'CONE_RESET_CAMERA',
       connect: 'WS_CONNECT',
