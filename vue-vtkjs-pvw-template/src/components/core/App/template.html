@@ -1,22 +1,27 @@
-<v-app :dark="darkMode">
-  <v-toolbar clipped-left app>
+<v-app>
+  <v-app-bar app>
     <img :src="logo" :class="$style.logo" v-on:click="resetCamera()" />
     <span class="title">Cone Application</span>
+    <v-progress-linear :active="busy" :indeterminate="busy" absolute bottom />
     <v-spacer />
-    <progress-bar :progress="busyPercent" />
     <v-slider
       :class="$style.slider"
       hide-details
-      v-model="resolution"
+      :value="resolution"
       :max="60"
       :min="3"
       :step="1"
+      @input="setResolution"
     />
-    <v-switch :class="$style.switch" hide-details v-model="darkMode" />
-  </v-toolbar>
+    <v-switch
+      :class="$style.switch"
+      @click="$vuetify.theme.dark = !$vuetify.theme.dark"
+    />
+  </v-app-bar>
 
-  <v-content :class="$style.appContent">
-    <remote-rendering-view :client="client" />
-    <!-- <vtk-view ref="vtkViewComponent"/> -->
-  </v-content>
+  <v-main :class="$style.appContent">
+    <div style="position: relative; width: 100%; height: 100%">
+      <remote-rendering-view :client="client" />
+    </div>
+  </v-main>
 </v-app>

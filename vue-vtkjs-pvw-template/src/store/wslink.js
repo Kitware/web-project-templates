@@ -3,8 +3,6 @@ import SmartConnect from 'wslink/src/SmartConnect';
 
 import coneProtocol from 'vue-vtkjs-pvw-template/src/io/protocol';
 
-import { Mutations } from 'vue-vtkjs-pvw-template/src/store/TYPES';
-
 import { connectImageStream } from 'vtk.js/Sources/Rendering/Misc/RemoteView';
 
 // Bind vtkWSLinkClient to our SmartConnect
@@ -14,28 +12,42 @@ export default {
   state: {
     client: null,
     config: null,
+    busy: false,
   },
   getters: {
-    NETWORK_CLIENT(state) {
+    WS_CLIENT(state) {
       return state.client;
     },
-    NETWORK_CONFIG(state) {
+    WS_CONFIG(state) {
       return state.config;
+    },
+    WS_BUSY(state) {
+      return state.busy;
     },
   },
   mutations: {
-    NETWORK_CLIENT_SET(state, client) {
+    WS_CLIENT_SET(state, client) {
       state.client = client;
     },
-    NETWORK_CONFIG_SET(state, config) {
+    WS_CONFIG_SET(state, config) {
       state.config = config;
+    },
+    WS_BUSY_SET(state, busy) {
+      state.busy = busy;
     },
   },
   actions: {
-    NETWORK_CONNECT({ commit, state }) {
-      const { config, client } = state;
+    WS_CONNECT({ commit, state }) {
+      // Initiate network connection
+      const config = { application: 'cone' };
+      if (location.port === '8080') {
+        // We suppose that we have dev server and that ParaView/VTK is running on port 1234
+        config.sessionURL = `ws://${location.hostname}:1234/ws`;
+      }
+
+      const { client } = state;
       if (client && client.isConnected()) {
-        client.disconnect();
+        client.disconnect(-1);
       }
       let clientToConnect = client;
       if (!clientToConnect) {
@@ -47,7 +59,7 @@ export default {
 
       // Connect to busy store
       clientToConnect.onBusyChange((count) => {
-        commit(Mutations.BUSY_COUNT_SET, count);
+        commit('WS_BUSY_SET', count);
       });
       clientToConnect.beginBusy();
 
@@ -74,12 +86,38 @@ export default {
         .connect(config)
         .then((validClient) => {
           connectImageStream(validClient.getConnection().getSession());
-          commit(Mutations.NETWORK_CLIENT_SET, validClient);
+          commit('WS_CLIENT_SET', validClient);
           clientToConnect.endBusy();
         })
         .catch((error) => {
           console.error(error);
         });
+    },
+    CONE_INITIALIZE({ state }) {
+      if (state.client) {
+        state.client
+          .getRemote()
+          .Cone.createVisualization()
+          .catch(console.error);
+      }
+    },
+    CONE_UPDATE_RESOLUTION({ state, commit }, res) {
+      const resolution = Number(res);
+      commit('CONE_RESOLUTION_SET', resolution);
+      if (state.client) {
+        state.client
+          .getRemote()
+          .Cone.updateResolution(resolution)
+          .catch(console.error);
+      }
+    },
+    CONE_RESET_CAMERA({ state }) {
+      if (state.client) {
+        state.client
+          .getRemote()
+          .Cone.resetCamera()
+          .catch(console.error);
+      }
     },
   },
 };
