@@ -47,7 +47,7 @@ export default {
 
       const { client } = state;
       if (client && client.isConnected()) {
-        client.disconnect();
+        client.disconnect(-1);
       }
       let clientToConnect = client;
       if (!clientToConnect) {
