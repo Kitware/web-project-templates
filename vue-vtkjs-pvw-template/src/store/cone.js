@@ -40,23 +40,12 @@ export default {
         client.getRemote().Cone.updateResolution(resolution);
       }
     },
-    CONE_RESET_CAMERA({ rootState, dispatch }) {
+    CONE_RESET_CAMERA({ rootState }) {
       const client = rootState.wslink.client;
       if (client) {
         client
           .getRemote()
           .Cone.resetCamera()
-          .then(
-            ({ focalPoint, viewUp, position, centerOfRotation, bounds }) => {
-              dispatch('VIEW_UPDATE_CAMERA', {
-                focalPoint,
-                viewUp,
-                position,
-                centerOfRotation,
-                bounds,
-              });
-            }
-          )
           .catch(console.error);
       }
     },

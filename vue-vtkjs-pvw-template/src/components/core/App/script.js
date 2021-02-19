@@ -1,6 +1,5 @@
 import { mapGetters, mapActions } from 'vuex';
 import logo from 'vue-vtkjs-pvw-template/src/assets/logo.png';
-import VtkView from 'vue-vtkjs-pvw-template/src/components/widgets/VtkView';
 import RemoteRenderingView from 'vue-vtkjs-pvw-template/src/components/widgets/RemoteRenderingView';
 import ProgressBar from 'vue-vtkjs-pvw-template/src/components/widgets/ProgressBar';
 
@@ -11,7 +10,6 @@ import ProgressBar from 'vue-vtkjs-pvw-template/src/components/widgets/ProgressB
 export default {
   name: 'App',
   components: {
-    VtkView,
     RemoteRenderingView,
     ProgressBar,
   },
@@ -33,9 +31,6 @@ export default {
   },
   watch: {
     client() {
-      // Setup view for remote rendering
-      this.viewRemoteRenderSetup();
-
       // This only happen once when the connection is ready
       this.initializeCone();
     },
@@ -43,7 +38,6 @@ export default {
   methods: {
     ...mapActions({
       updateConeResolution: 'CONE_UPDATE_RESOLUTION',
-      viewRemoteRenderSetup: 'VIEW_REMOTE_RENDERING_SETUP',
       initializeCone: 'CONE_INITIALIZE',
       resetCamera: 'CONE_RESET_CAMERA',
       connect: 'WS_CONNECT',
