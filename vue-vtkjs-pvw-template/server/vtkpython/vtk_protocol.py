@@ -17,21 +17,6 @@ class VtkCone(vtk_protocols.vtkWebProtocol):
     def __init__(self):
         self.cone = vtk.vtkConeSource()
 
-    def getCamera(self):
-        renderWindow = self.getView('-1')
-        rr = renderWindow.GetRenderers().GetFirstRenderer()
-        bounds = rr.ComputeVisiblePropBounds()
-        camera = rr.GetActiveCamera()
-
-        return {
-          'id': self.getGlobalId(renderWindow),
-          'bounds': bounds,
-          'position': tuple(camera.GetPosition()),
-          'viewUp': tuple(camera.GetViewUp()),
-          'focalPoint': tuple(camera.GetFocalPoint()),
-          'centerOfRotation': (0, 0, 0),
-        }
-
     @exportRpc("vtk.initialize")
     def createVisualization(self):
         renderWindow = self.getView('-1')
@@ -60,7 +45,7 @@ class VtkCone(vtk_protocols.vtkWebProtocol):
         self.getApplication().InvalidateCache(renderWindow)
         self.getApplication().InvokeEvent('UpdateEvent')
 
-        return self.getCamera()
+        return -1
 
 
     @exportRpc("vtk.cone.resolution.update")

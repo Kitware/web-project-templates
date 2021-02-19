@@ -140,11 +140,12 @@ class _Server(pv_wslink.PVServerProtocol):
         # Update interaction mode
         interactionProxy = pxm.GetProxy("settings", "RenderViewInteractionSettings")
         # fmt: off
-        interactionProxy.Camera3DManipulators = [ 
-                "Rotate", "Pan",    "Zoom",  
-                "Pan",    "Roll",   "Pan",   # While holding shift
-                "Zoom",   "Rotate", "Zoom",  # While holding ctrl
-        ] 
+        interactionProxy.Camera3DManipulators = [
+            # left    middle    right    < button of the mouse
+            "Rotate", "Pan",    "Zoom",  # Just mouse no key down
+            "Pan",    "Roll",   "Pan",   # While holding Shift
+            "Zoom",   "Rotate", "Zoom",  # While holding Ctrl
+        ]
         # fmt: on
 
         # Custom rendering settings

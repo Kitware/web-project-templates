@@ -5,46 +5,10 @@ from wslink import register as exportRpc
 from paraview import simple, servermanager
 from paraview.web import protocols as pv_protocols
 
-try:
-    # PV 5.8+
-    from paraview.modules.vtkRemotingViews import vtkPVRenderView
-except:
-    pass
-
-try:
-    # PV 5.7
-    from paraview.modules.vtkPVClientServerCoreRendering import vtkPVRenderView
-except:
-    pass
-
-try:
-    # PV 5.6
-    from vtkmodules.vtkPVClientServerCoreRendering import vtkPVRenderView
-except:
-    pass
-
 # Make sure only one cone is available
 cone = simple.Cone()
 
 class ParaViewCone(pv_protocols.ParaViewWebProtocol):
-
-    def getCamera(self):
-        view = self.getView('-1')
-        bounds = [-1, 1, -1, 1, -1, 1]
-
-        if view and view.GetClientSideView().GetClassName() == 'vtkPVRenderView':
-          rr = view.GetClientSideView().GetRenderer()
-          bounds = rr.ComputeVisiblePropBounds()
-
-        return {
-          'id': view.GetGlobalIDAsString(),
-          'bounds': bounds,
-          'position': tuple(view.CameraPosition),
-          'viewUp': tuple(view.CameraViewUp),
-          'focalPoint': tuple(view.CameraFocalPoint),
-          'centerOfRotation': tuple(view.CenterOfRotation),
-        }
-
 
     @exportRpc("vtk.initialize")
     def createVisualization(self):
@@ -65,7 +29,7 @@ class ParaViewCone(pv_protocols.ParaViewWebProtocol):
         self.getApplication().InvalidateCache(view.SMProxy)
         self.getApplication().InvokeEvent('UpdateEvent')
 
-        return self.getCamera()
+        return view.GetGlobalIDAsString()
 
 
     @exportRpc("vtk.cone.resolution.update")

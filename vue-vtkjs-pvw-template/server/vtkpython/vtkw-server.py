@@ -29,10 +29,11 @@ import argparse
 if '--virtual-env' in sys.argv:
   virtualEnvPath = sys.argv[sys.argv.index('--virtual-env') + 1]
   virtualEnv = virtualEnvPath + '/bin/activate_this.py'
-  if 'execfile' in dir():
+  if sys.version_info.major < 3:
     execfile(virtualEnv, dict(__file__=virtualEnv))
   else:
-    exec(open(virtualEnv).read(), dict(__file__=virtualEnv))
+    with open(virtualEnv) as venv:
+        exec(venv.read(), dict(__file__=virtualEnv))
 
 # from __future__ import absolute_import, division, print_function
 
