@@ -18,6 +18,9 @@ export default {
     WS_CLIENT(state) {
       return state.client;
     },
+    WS_CONFIG(state) {
+      return state.config;
+    },
     WS_BUSY(state) {
       return state.busy;
     },
@@ -25,6 +28,9 @@ export default {
   mutations: {
     WS_CLIENT_SET(state, client) {
       state.client = client;
+    },
+    WS_CONFIG_SET(state, config) {
+      state.config = config;
     },
     WS_BUSY_SET(state, busy) {
       state.busy = busy;
