@@ -12,6 +12,7 @@ export default {
   state: {
     client: null,
     config: null,
+    busy: false,
   },
   getters: {
     WS_CLIENT(state) {
@@ -20,6 +21,9 @@ export default {
     WS_CONFIG(state) {
       return state.config;
     },
+    WS_BUSY(state) {
+      return state.busy;
+    },
   },
   mutations: {
     WS_CLIENT_SET(state, client) {
@@ -27,6 +31,9 @@ export default {
     },
     WS_CONFIG_SET(state, config) {
       state.config = config;
+    },
+    WS_BUSY_SET(state, busy) {
+      state.busy = busy;
     },
   },
   actions: {
@@ -52,7 +59,7 @@ export default {
 
       // Connect to busy store
       clientToConnect.onBusyChange((count) => {
-        commit('BUSY_COUNT_SET', count);
+        commit('WS_BUSY_SET', count);
       });
       clientToConnect.beginBusy();
 

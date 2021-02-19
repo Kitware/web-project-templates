@@ -2,8 +2,8 @@
   <v-app-bar app>
     <img :src="logo" :class="$style.logo" v-on:click="resetCamera()" />
     <span class="title">Cone Application</span>
+    <v-progress-linear :active="busy" :indeterminate="busy" absolute bottom />
     <v-spacer />
-    <progress-bar :progress="busyPercent" />
     <v-slider
       :class="$style.slider"
       hide-details

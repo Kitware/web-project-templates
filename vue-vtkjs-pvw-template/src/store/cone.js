@@ -13,23 +13,12 @@ export default {
     },
   },
   actions: {
-    CONE_INITIALIZE({ rootState, dispatch }) {
+    CONE_INITIALIZE({ rootState }) {
       const client = rootState.wslink.client;
       if (client) {
         client
           .getRemote()
           .Cone.createVisualization()
-          .then(
-            ({ focalPoint, viewUp, position, centerOfRotation, bounds }) => {
-              dispatch('VIEW_UPDATE_CAMERA', {
-                focalPoint,
-                viewUp,
-                position,
-                centerOfRotation,
-                bounds,
-              });
-            }
-          )
           .catch(console.error);
       }
     },
