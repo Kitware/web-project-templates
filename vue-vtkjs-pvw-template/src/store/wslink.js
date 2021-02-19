@@ -1,7 +1,7 @@
 import vtkWSLinkClient from 'vtk.js/Sources/IO/Core/WSLinkClient';
 import SmartConnect from 'wslink/src/SmartConnect';
 
-import coneProtocol from 'vue-vtkjs-pvw-template/src/io/protocol';
+import protocols from 'vue-vtkjs-pvw-template/src/protocols';
 
 import { connectImageStream } from 'vtk.js/Sources/Rendering/Misc/RemoteView';
 
@@ -22,7 +22,7 @@ export default {
       return state.config;
     },
     WS_BUSY(state) {
-      return state.busy;
+      return !!state.busy;
     },
   },
   mutations: {
@@ -37,9 +37,11 @@ export default {
     },
   },
   actions: {
-    WS_CONNECT({ commit, state }) {
+    WS_CONNECT({ state, commit, dispatch }) {
       // Initiate network connection
       const config = { application: 'cone' };
+
+      // Custom setup for development (http:8080 / ws:1234)
       if (location.port === '8080') {
         // We suppose that we have dev server and that ParaView/VTK is running on port 1234
         config.sessionURL = `ws://${location.hostname}:1234/ws`;
@@ -51,10 +53,7 @@ export default {
       }
       let clientToConnect = client;
       if (!clientToConnect) {
-        clientToConnect = vtkWSLinkClient.newInstance();
-        clientToConnect.setProtocols({
-          Cone: coneProtocol,
-        });
+        clientToConnect = vtkWSLinkClient.newInstance({ protocols });
       }
 
       // Connect to busy store
@@ -88,12 +87,15 @@ export default {
           connectImageStream(validClient.getConnection().getSession());
           commit('WS_CLIENT_SET', validClient);
           clientToConnect.endBusy();
+
+          // Now that the client is ready let's setup the server for us
+          dispatch('WS_INITIALIZE_SERVER');
         })
         .catch((error) => {
           console.error(error);
         });
     },
-    CONE_INITIALIZE({ state }) {
+    WS_INITIALIZE_SERVER({ state }) {
       if (state.client) {
         state.client
           .getRemote()
@@ -101,9 +103,7 @@ export default {
           .catch(console.error);
       }
     },
-    CONE_UPDATE_RESOLUTION({ state, commit }, res) {
-      const resolution = Number(res);
-      commit('CONE_RESOLUTION_SET', resolution);
+    WS_UPDATE_RESOLUTION({ state }, resolution) {
       if (state.client) {
         state.client
           .getRemote()
@@ -111,7 +111,7 @@ export default {
           .catch(console.error);
       }
     },
-    CONE_RESET_CAMERA({ state }) {
+    WS_RESET_CAMERA({ state }) {
       if (state.client) {
         state.client
           .getRemote()

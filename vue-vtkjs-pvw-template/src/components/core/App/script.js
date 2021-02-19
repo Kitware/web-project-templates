@@ -25,17 +25,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      setResolution: 'CONE_UPDATE_RESOLUTION',
-      initializeCone: 'CONE_INITIALIZE',
-      resetCamera: 'CONE_RESET_CAMERA',
+      setResolution: 'CONE_RESOLUTION_UPDATE',
+      resetCamera: 'WS_RESET_CAMERA',
       connect: 'WS_CONNECT',
     }),
-  },
-  watch: {
-    client() {
-      // This only happen once when the connection is ready
-      this.initializeCone();
-    },
   },
   mounted() {
     this.connect();
