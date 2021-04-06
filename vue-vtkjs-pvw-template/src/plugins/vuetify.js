@@ -8,4 +8,10 @@ Vue.use(Vuetify, {
 
 export default new Vuetify({
   // Config for icons
+  icons: {
+    iconfont: 'mdi',
+    values: {
+      resetCamera: 'mdi-camera',
+    },
+  },
 });
