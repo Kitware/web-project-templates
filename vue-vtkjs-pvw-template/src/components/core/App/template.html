@@ -17,6 +17,7 @@
       :class="$style.switch"
       @click="$vuetify.theme.dark = !$vuetify.theme.dark"
     />
+    <v-icon v-text="`$resetCamera`" v-on:click="resetCamera()" />
   </v-app-bar>
 
   <v-main :class="$style.appContent">
