@@ -113,10 +113,7 @@ export default {
     },
     WS_RESET_CAMERA({ state }) {
       if (state.client) {
-        state.client
-          .getRemote()
-          .Cone.resetCamera()
-          .catch(console.error);
+        state.client.getRemote().Cone.resetCamera().catch(console.error);
       }
     },
   },

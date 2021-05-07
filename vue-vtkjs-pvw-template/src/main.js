@@ -1,7 +1,3 @@
-// Import polyfills
-import 'core-js/modules/es7.promise.finally';
-import 'core-js/modules/web.immediate';
-
 import Vue from 'vue';
 import Vuex from 'vuex';
 

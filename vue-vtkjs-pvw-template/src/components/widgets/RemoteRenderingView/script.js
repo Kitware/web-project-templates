@@ -34,7 +34,7 @@ export default {
   methods: {
     connect() {
       if (this.client) {
-        //console.log('RemoteRenderView', this.viewId);
+        // console.log('RemoteRenderView', this.viewId);
         const session = this.client.getConnection().getSession();
         this.view.setSession(session);
         this.view.setViewId(this.viewId);
@@ -51,7 +51,7 @@ export default {
       this.connect();
     },
     viewId(id) {
-      //console.log('RemoteRenderView', id);
+      // console.log('RemoteRenderView', id);
       if (this.connected) {
         this.view.setViewId(id);
         this.view.render();
