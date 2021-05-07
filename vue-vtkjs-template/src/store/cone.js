@@ -36,7 +36,7 @@ export default {
       actor.setMapper(mapper);
 
       commit(Mutations.CONE_SOURCE_SET, coneSource);
-      const viewProxy = rootState.view.viewProxy;
+      const { viewProxy } = rootState.view;
 
       viewProxy.getRenderer().addActor(actor);
       viewProxy.resetCamera();
@@ -45,12 +45,12 @@ export default {
     CONE_UPDATE_RESOLUTION({ state, rootState, commit }, resolution) {
       commit(Mutations.CONE_RESOLUTION_SET, resolution);
 
-      const viewProxy = rootState.view.viewProxy;
+      const { viewProxy } = rootState.view;
       state.coneSource.setResolution(resolution);
       viewProxy.renderLater();
     },
     CONE_RESET_CAMERA({ rootState }) {
-      const viewProxy = rootState.view.viewProxy;
+      const { viewProxy } = rootState.view;
       viewProxy.resetCamera();
       viewProxy.renderLater();
     },
