@@ -29,11 +29,8 @@ import argparse
 if '--virtual-env' in sys.argv:
   virtualEnvPath = sys.argv[sys.argv.index('--virtual-env') + 1]
   virtualEnv = virtualEnvPath + '/bin/activate_this.py'
-  if sys.version_info.major < 3:
-    execfile(virtualEnv, dict(__file__=virtualEnv))
-  else:
-    with open(virtualEnv) as venv:
-        exec(venv.read(), dict(__file__=virtualEnv))
+  with open(virtualEnv) as venv:
+    exec(venv.read(), dict(__file__=virtualEnv))
 
 # from __future__ import absolute_import, division, print_function
 
@@ -44,7 +41,6 @@ from vtk.web import wslink as vtk_wslink
 from vtk.web import protocols as vtk_protocols
 
 import vtk
-import vtk_override_protocols
 from vtk_protocol import VtkCone
 
 # =============================================================================
@@ -70,8 +66,7 @@ class _Server(vtk_wslink.ServerProtocol):
         # Bring used components
         self.registerVtkWebProtocol(vtk_protocols.vtkWebMouseHandler())
         self.registerVtkWebProtocol(vtk_protocols.vtkWebViewPort())
-        self.registerVtkWebProtocol(
-            vtk_override_protocols.vtkWebPublishImageDelivery(decode=False))
+        self.registerVtkWebProtocol(vtk_protocols.vtkWebPublishImageDelivery(decode=False))
 
         # Custom API
         self.registerVtkWebProtocol(VtkCone())

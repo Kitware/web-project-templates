@@ -4,9 +4,6 @@ from vtk.web import protocols as vtk_protocols
 
 from wslink import register as exportRpc
 
-# import Twisted reactor for later callback
-from twisted.internet import reactor
-
 import vtk
 
 # -------------------------------------------------------------------------
