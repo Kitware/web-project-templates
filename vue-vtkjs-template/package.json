@@ -11,7 +11,7 @@
     "@mdi/font": "5.9.55",
     "core-js": "3.12.0",
     "typeface-roboto": "1.1.13",
-    "vtk.js": "18.0.0",
+    "vtk.js": "25.14.1",
     "vue": "2.6.12",
     "vuetify": "1.5.3",
     "vuex": "3.6.2"
